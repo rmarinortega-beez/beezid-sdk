@@ -27,6 +27,7 @@ export interface BeezIDSession {
   appId: string;
   status: BeezIDCallbackResult['status'];
   state?: string;
+  token?: string;
   createdAt: string;
 }
 

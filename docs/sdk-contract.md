@@ -29,7 +29,7 @@ BeezID is responsible for deciding how those minimum permissions are assigned af
 BeezID returns:
 
 ```text
-{redirectUri}?state={state}&beezid_status=authenticated
+{redirectUri}?state={state}&beezid_status=authenticated&beezid_token={token}
 ```
 
 or:
@@ -39,6 +39,14 @@ or:
 ```
 
 The SDK validates the state it generated and stores a lightweight SDK session. This is not a Supabase Auth session.
+
+`beezid_token` is an opaque BeezID SDK token. The SDK stores it and sends it as:
+
+```text
+Authorization: Bearer {token}
+```
+
+to BeezID HTTP endpoints.
 
 ## HTTP Surface
 

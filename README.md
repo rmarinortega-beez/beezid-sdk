@@ -71,6 +71,8 @@ if (result.status === 'authenticated') {
 }
 ```
 
+The callback stores the opaque `beezid_token` returned by BeezID. The SDK sends that token to BeezID HTTP endpoints; consumer apps do not need Supabase Auth credentials.
+
 ## Config
 
 - `appId`: slug de la aplicacion consumidora.

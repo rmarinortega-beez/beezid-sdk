@@ -67,6 +67,7 @@ export class BeezIDClient {
     const status = (url.searchParams.get('beezid_status') ?? 'error') as BeezIDCallbackResult['status'];
     const error = url.searchParams.get('error') ?? undefined;
     const app = url.searchParams.get('app') ?? undefined;
+    const token = url.searchParams.get('beezid_token') ?? undefined;
 
     if (state && this.storage.getItem(this.stateKey(state)) !== state) {
       return { status: 'error', state, app, error: 'Invalid BeezID state' };
@@ -80,6 +81,7 @@ export class BeezIDClient {
         appId: this.appId,
         status,
         state,
+        token,
         createdAt: new Date().toISOString(),
       });
     }
@@ -172,6 +174,7 @@ export class BeezIDClient {
       ...init,
       headers: {
         'content-type': 'application/json',
+        ...this.authHeaders(),
         ...init.headers,
       },
     });
@@ -205,6 +208,11 @@ export class BeezIDClient {
 
   private stateKey(state: string): string {
     return `beezid.state.${this.appId}.${state}`;
+  }
+
+  private authHeaders(): HeadersInit {
+    const token = this.getSession()?.token;
+    return token ? { authorization: `Bearer ${token}` } : {};
   }
 
   private readJson<T>(key: string): T | null {
