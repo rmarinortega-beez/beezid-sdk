@@ -58,7 +58,7 @@ The SDK expects BeezID to expose HTTP endpoints that wrap its public RPC contrac
 - `POST /api/beezid/apps/check`
 - `POST /api/beezid/logout`
 
-The requests use `credentials: include` so BeezID can rely on its own first-party session/cookie strategy.
+The requests use an opaque Bearer token and `credentials: omit`, so consumer apps do not rely on cross-site cookies.
 
 ## BeezContext
 

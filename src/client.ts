@@ -170,7 +170,7 @@ export class BeezIDClient {
 
   private async request<T = void>(path: string, init: RequestInit = {}): Promise<T> {
     const response = await this.fetcher(new URL(path, this.beezIdUrl), {
-      credentials: 'include',
+      credentials: 'omit',
       ...init,
       headers: {
         'content-type': 'application/json',
