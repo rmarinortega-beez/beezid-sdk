@@ -1,0 +1,55 @@
+{
+  "name": "@beez-projects/beezid",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Client SDK for BeezID identity and access context.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "import": "./dist/react.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "docs"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepack": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rmarinortega-beez/beezid-sdk.git"
+  },
+  "keywords": [
+    "beez",
+    "beezid",
+    "identity",
+    "access",
+    "sdk"
+  ],
+  "author": "",
+  "license": "UNLICENSED",
+  "peerDependencies": {
+    "react": ">=18.0.0 || >=19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.17",
+    "react": "^19.2.7",
+    "typescript": "^6.0.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
