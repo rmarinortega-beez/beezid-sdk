@@ -1,6 +1,6 @@
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { BeezIDClient } from './client';
-import type { BeezContext, BeezIDClientConfig, BeezIDContextValue, BeezIDRedirectOptions, BeezIDSession } from './types';
+import type { BeezContext, BeezIDCallbackResult, BeezIDClientConfig, BeezIDContextValue, BeezIDRedirectOptions, BeezIDSession } from './types';
 
 const BeezReactContext = createContext<BeezIDContextValue | null>(null);
 
@@ -33,6 +33,31 @@ export function BeezIDProvider({ children, autoLoadContext = true, ...config }: 
     }
   }, [client]);
 
+  const handleCallback = useCallback(
+    async (callbackUrl?: string): Promise<BeezIDCallbackResult> => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const result = client.handleCallback(callbackUrl);
+        setSession(client.getSession());
+
+        if (result.status === 'authenticated') {
+          const nextContext = await client.getContext();
+          setContext(nextContext);
+        }
+
+        return result;
+      } catch (callbackError) {
+        const nextError = callbackError instanceof Error ? callbackError : new Error('Unable to handle BeezID callback');
+        setError(nextError);
+        return { status: 'error', error: nextError.message };
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [client],
+  );
+
   useEffect(() => {
     if (autoLoadContext && session) {
       refreshContext();
@@ -46,6 +71,7 @@ export function BeezIDProvider({ children, autoLoadContext = true, ...config }: 
       context,
       isLoading,
       error,
+      handleCallback,
       refreshContext,
       login: (options?: BeezIDRedirectOptions) => client.login(options),
       register: (options?: BeezIDRedirectOptions) => client.register(options),
@@ -62,7 +88,7 @@ export function BeezIDProvider({ children, autoLoadContext = true, ...config }: 
         await refreshContext();
       },
     }),
-    [client, config.appId, context, error, isLoading, refreshContext, session],
+    [client, config.appId, context, error, handleCallback, isLoading, refreshContext, session],
   );
 
   return <BeezReactContext.Provider value={value}>{children}</BeezReactContext.Provider>;

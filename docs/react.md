@@ -22,6 +22,16 @@ Wrap the consumer app:
 - `useBeezOrganization()`: active organization.
 - `useBeezPermission(permission)`: local permission check.
 
+On the consumer callback route, use the provider action so React state is hydrated:
+
+```tsx
+const { handleCallback } = useBeezID();
+
+useEffect(() => {
+  handleCallback(window.location.href);
+}, [handleCallback]);
+```
+
 ## PermissionGate
 
 ```tsx

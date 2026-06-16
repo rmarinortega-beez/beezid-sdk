@@ -77,6 +77,7 @@ export interface BeezIDState {
 
 export interface BeezIDContextValue extends BeezIDState {
   client: import('./client').BeezIDClient;
+  handleCallback: (callbackUrl?: string) => Promise<BeezIDCallbackResult>;
   refreshContext: () => Promise<BeezContext | null>;
   login: (options?: BeezIDRedirectOptions) => void;
   register: (options?: BeezIDRedirectOptions) => void;

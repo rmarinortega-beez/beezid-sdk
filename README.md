@@ -64,11 +64,9 @@ function GravityApp() {
 ## Callback
 
 ```ts
-const result = beezId.handleCallback(window.location.href);
+const { handleCallback } = useBeezID();
 
-if (result.status === 'authenticated') {
-  await beezId.getContext();
-}
+const result = await handleCallback(window.location.href);
 ```
 
 The callback stores the opaque `beezid_token` returned by BeezID. The SDK sends that token to BeezID HTTP endpoints; consumer apps do not need Supabase Auth credentials.
