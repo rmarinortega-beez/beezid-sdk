@@ -26,6 +26,8 @@ export function BeezIDProvider({ children, autoLoadContext = true, ...config }: 
       return nextContext;
     } catch (refreshError) {
       const nextError = refreshError instanceof Error ? refreshError : new Error('Unable to refresh BeezID context');
+      setSession(client.getSession());
+      setContext(client.getStoredContext());
       setError(nextError);
       return null;
     } finally {
@@ -38,7 +40,7 @@ export function BeezIDProvider({ children, autoLoadContext = true, ...config }: 
       setIsLoading(true);
       setError(null);
       try {
-        const result = client.handleCallback(callbackUrl);
+        const result = await client.handleCallback(callbackUrl);
         setSession(client.getSession());
 
         if (result.status === 'authenticated') {
@@ -73,6 +75,11 @@ export function BeezIDProvider({ children, autoLoadContext = true, ...config }: 
       error,
       handleCallback,
       refreshContext,
+      refreshSession: async (force?: boolean) => {
+        const nextSession = await client.refreshSession(force);
+        setSession(nextSession);
+        return nextSession;
+      },
       login: (options?: BeezIDRedirectOptions) => client.login(options),
       register: (options?: BeezIDRedirectOptions) => client.register(options),
       logout: async () => {

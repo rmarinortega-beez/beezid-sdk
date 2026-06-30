@@ -29,6 +29,7 @@ export interface BeezIDSession {
   state?: string;
   token?: string;
   createdAt: string;
+  expiresAt?: string;
 }
 
 export interface BeezUser {
@@ -79,8 +80,9 @@ export interface BeezIDContextValue extends BeezIDState {
   client: import('./client').BeezIDClient;
   handleCallback: (callbackUrl?: string) => Promise<BeezIDCallbackResult>;
   refreshContext: () => Promise<BeezContext | null>;
-  login: (options?: BeezIDRedirectOptions) => void;
-  register: (options?: BeezIDRedirectOptions) => void;
+  refreshSession: (force?: boolean) => Promise<BeezIDSession>;
+  login: (options?: BeezIDRedirectOptions) => Promise<void>;
+  register: (options?: BeezIDRedirectOptions) => Promise<void>;
   logout: () => Promise<void>;
   hasPermission: (permission: string) => boolean;
   hasAppAccess: (appId?: string) => boolean;

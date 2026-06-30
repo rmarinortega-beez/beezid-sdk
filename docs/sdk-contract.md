@@ -26,10 +26,10 @@ BeezID is responsible for deciding how those minimum permissions are assigned af
 
 ## Callback
 
-BeezID returns:
+BeezID returns a one-time authorization code:
 
 ```text
-{redirectUri}?state={state}&beezid_status=authenticated&beezid_token={token}
+{redirectUri}?state={state}&beezid_status=authenticated&code={authorizationCode}
 ```
 
 or:
@@ -38,15 +38,15 @@ or:
 {redirectUri}?state={state}&beezid_status=not_authorized&app={appId}
 ```
 
-The SDK validates the state it generated and stores a lightweight SDK session. This is not a Supabase Auth session.
+The SDK validates the state, exchanges the code with its PKCE verifier and stores a lightweight SDK session. This is not a Supabase Auth session.
 
-`beezid_token` is an opaque BeezID SDK token. The SDK stores it and sends it as:
+The resulting access token is short lived. The SDK stores it and sends it as:
 
 ```text
 Authorization: Bearer {token}
 ```
 
-to BeezID HTTP endpoints.
+to BeezID HTTP endpoints. BeezID keeps the renewable credential in an HttpOnly cookie scoped to its API. The SDK calls `/api/beezid/session/refresh` before expiry and retries at most once after a 401.
 
 ## HTTP Surface
 
@@ -57,8 +57,10 @@ The SDK expects BeezID to expose HTTP endpoints that wrap its public RPC contrac
 - `POST /api/beezid/permissions/check`
 - `POST /api/beezid/apps/check`
 - `POST /api/beezid/logout`
+- `POST /api/beezid/session/token`
+- `POST /api/beezid/session/refresh`
 
-The requests use an opaque Bearer token and `credentials: omit`, so consumer apps do not rely on cross-site cookies.
+Authorized API requests use the opaque Bearer access token and `credentials: include` so the refresh endpoint can use the server-managed HttpOnly cookie. BeezID must return an exact allowed origin and `Access-Control-Allow-Credentials: true`.
 
 ## BeezContext
 
