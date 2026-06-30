@@ -1,6 +1,6 @@
 {
   "name": "@beez-projects/beezid",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": false,
   "description": "Client SDK for BeezID identity and access context.",
   "type": "module",
