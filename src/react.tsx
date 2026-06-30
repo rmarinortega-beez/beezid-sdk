@@ -1,4 +1,4 @@
-import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { BeezIDClient } from './client.js';
 import type { BeezContext, BeezIDCallbackResult, BeezIDClientConfig, BeezIDContextValue, BeezIDRedirectOptions, BeezIDSession } from './types.js';
 
@@ -15,6 +15,7 @@ export function BeezIDProvider({ children, autoLoadContext = true, ...config }: 
   const [context, setContext] = useState<BeezContext | null>(() => client.getStoredContext());
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const autoLoadedToken = useRef<string | null>(null);
 
   const refreshContext = useCallback(async () => {
     setIsLoading(true);
@@ -61,10 +62,11 @@ export function BeezIDProvider({ children, autoLoadContext = true, ...config }: 
   );
 
   useEffect(() => {
-    if (autoLoadContext && session) {
-      refreshContext();
-    }
-  }, [autoLoadContext, refreshContext, session]);
+    const token = session?.token ?? null;
+    if (!autoLoadContext || !token || autoLoadedToken.current === token) return;
+    autoLoadedToken.current = token;
+    void refreshContext();
+  }, [autoLoadContext, refreshContext, session?.token]);
 
   const value = useMemo<BeezIDContextValue>(
     () => ({
