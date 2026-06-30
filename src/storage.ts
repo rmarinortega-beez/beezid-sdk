@@ -1,4 +1,4 @@
-import type { BeezIDStorage } from './types';
+import type { BeezIDStorage } from './types.js';
 
 export class MemoryStorage implements BeezIDStorage {
   private values = new Map<string, string>();

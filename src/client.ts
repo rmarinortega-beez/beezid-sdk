@@ -1,4 +1,4 @@
-import { resolveStorage } from './storage';
+import { resolveStorage } from './storage.js';
 import type {
   BeezContext,
   BeezIDCallbackResult,
@@ -6,7 +6,7 @@ import type {
   BeezIDRedirectOptions,
   BeezIDSession,
   BeezIDStorage,
-} from './types';
+} from './types.js';
 
 const SESSION_KEY = 'beezid.session';
 const CONTEXT_KEY = 'beezid.context';

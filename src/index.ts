@@ -1,5 +1,5 @@
-export { BeezIDClient } from './client';
-export { MemoryStorage, resolveStorage } from './storage';
+export { BeezIDClient } from './client.js';
+export { MemoryStorage, resolveStorage } from './storage.js';
 export type {
   BeezApplication,
   BeezContext,
@@ -13,4 +13,4 @@ export type {
   BeezOrganization,
   BeezRole,
   BeezUser,
-} from './types';
+} from './types.js';

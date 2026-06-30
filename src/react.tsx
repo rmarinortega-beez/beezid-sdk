@@ -1,6 +1,6 @@
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { BeezIDClient } from './client';
-import type { BeezContext, BeezIDCallbackResult, BeezIDClientConfig, BeezIDContextValue, BeezIDRedirectOptions, BeezIDSession } from './types';
+import { BeezIDClient } from './client.js';
+import type { BeezContext, BeezIDCallbackResult, BeezIDClientConfig, BeezIDContextValue, BeezIDRedirectOptions, BeezIDSession } from './types.js';
 
 const BeezReactContext = createContext<BeezIDContextValue | null>(null);
 
@@ -151,4 +151,4 @@ export type {
   BeezOrganization,
   BeezRole,
   BeezUser,
-} from './types';
+} from './types.js';
